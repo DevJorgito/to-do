@@ -7,16 +7,19 @@ const Today = () => {
     const { tasks, editTask, deleteTask, markAsCompleted } = useTasks();
     const [editingIndex, setEditingIndex] = useState(null);
     const [taskDescription, setTaskDescription] = useState('');
+    const [taskStatus, setTaskStatus] = useState('');
 
     const handleEditClick = (index, task) => {
         setEditingIndex(index);
         setTaskDescription(task.description);
+        setTaskStatus(task.status);
     };
 
     const handleSave = () => {
-        editTask(editingIndex, { description: taskDescription});
+        editTask(editingIndex, { description: taskDescription, status: taskStatus });
         setEditingIndex(null);
         setTaskDescription('');
+        setTaskStatus('');
     };
 
     return (
@@ -31,7 +34,10 @@ const Today = () => {
                         </div>
                         <div className="flex space-x-4 items-center">
                             <button onClick={() => markAsCompleted(index)} className="p-1 text-green-500">
-                                <FontAwesomeIcon icon={task.status === 'Completado' ? faCheckCircle : faCircle} className={`text-${task.status === 'Completado' ? 'green' : 'gray'}-500`} />
+                                <FontAwesomeIcon 
+                                    icon={task.status === 'Completado' ? faCheckCircle : faCircle} 
+                                    className={`text-${task.status === 'Completado' ? 'green' : 'gray'}-500`} 
+                                />
                             </button>
                             <button onClick={() => handleEditClick(index, task)} className="p-1">
                                 <FontAwesomeIcon icon={faEdit} className="text-blue-500" />
@@ -53,6 +59,14 @@ const Today = () => {
                         className="border p-2 mb-2 w-full"
                         placeholder="Task Description"
                     />
+                    <select
+                        value={taskStatus}
+                        onChange={(e) => setTaskStatus(e.target.value)}
+                        className="border p-2 mb-2 w-full"
+                    >
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Completado">Completado</option>
+                    </select>
                     <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-2 rounded">
                         Save
                     </button>
